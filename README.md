@@ -1,96 +1,109 @@
-# Sentiment Analysis Voice API
+# Projet Analyse de Sentiment Vocal
 
 ![Python](https://img.shields.io/badge/Python-3.10-blue.svg)
-![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)
 
-## Project Description
+## Description du Projet
 
-The **Sentiment Analysis Voice API** is an innovative project that leverages voice input to analyze sentiment in text. This application allows users to speak their thoughts, which are then converted to text and analyzed for sentiment. The project integrates speech-to-text capabilities with sentiment analysis, providing a seamless user experience for understanding emotional tone in spoken language.
+L’**API d’Analyse de Sentiment Vocal** est un projet innovant qui transforme la parole en texte, puis analyse ce texte pour en détecter le **sentiment** exprimé. Elle combine reconnaissance vocale et traitement du langage naturel pour fournir une évaluation émotionnelle du discours de l’utilisateur.
 
-### Key Features
-- **Speech-to-Text Conversion**: Convert spoken language into text using advanced speech recognition techniques.
-- **Sentiment Analysis**: Analyze the emotional tone of the transcribed text to determine sentiment polarity (positive, negative, neutral).
-- **API Integration**: Easily deployable as an API for integration with other applications or services.
+### Fonctionnalités Clés
 
-## Tech Stack
+* 🎙️ **Conversion Parole en Texte** : Utilisation de modèles préentraînés pour la transcription audio.
+* 💬 **Analyse de Sentiment** : Détection du ton émotionnel du texte transcrit (positif, négatif, neutre).
+* 🔗 **API REST** : Utilisable comme service API, facilement intégrable dans d'autres applications.
 
-| Technology         | Description                          |
-|--------------------|--------------------------------------|
-| ![Python](https://img.shields.io/badge/Python-3.10-blue.svg) | Programming language used for backend development. |
-| ![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg) | Containerization tool for managing application services. |
+---
 
-## Installation Instructions
+## Modèles Utilisés
 
-### Prerequisites
-- Python 3.10 or higher
-- Docker and Docker Compose
+Voici les modèles préentraînés utilisés dans cette API :
 
-### Step-by-Step Installation Guide
-1. **Clone the repository**:
+| Composant                  | Modèle                                                                                                                        | Description                                                                                                                                                     |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Reconnaissance vocale (FR) | [`jonatasgrosman/wav2vec2-large-xlsr-53-french`](https://huggingface.co/jonatasgrosman/wav2vec2-large-xlsr-53-french)         | Modèle Wav2Vec2 finement ajusté pour la transcription vocale en **français**. Haute précision pour les entrées audio francophones.                              |
+| Reconnaissance vocale (EN) | [`facebook/wav2vec2-large-960h-lv60-self`](https://huggingface.co/facebook/wav2vec2-large-960h-lv60-self)                     | Modèle de base de Facebook pour la reconnaissance vocale en **anglais**. Utilisé si la langue détectée n'est pas le français.                                   |
+| Analyse de sentiment       | [`nlptown/bert-base-multilingual-uncased-sentiment`](https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment) | Modèle BERT multilingue pour l’analyse des sentiments. Capable de traiter plusieurs langues (dont le français et l’anglais). Renvoie un score de 1 à 5 étoiles. |
+
+---
+
+## Pile Technologique
+
+| Technologie                                                  | Description                                                 |
+| ------------------------------------------------------------ | ----------------------------------------------------------- |
+| ![Python](https://img.shields.io/badge/Python-3.10-blue.svg) | Langage utilisé pour le développement du backend.           |
+| Hugging Face Transformers                                    | Pour le chargement et l’utilisation des modèles NLP et ASR. |
+| Gradio                                                       | Interface utilisateur pour tester l’API vocalement.         |
+
+---
+
+## Installation
+
+### Prérequis
+
+* Python 3.10 ou version supérieure
+
+### Guide Pas à Pas
+
+1. **Cloner le dépôt** :
+
    ```bash
    git clone https://github.com/Mvhamad/Sentiment-Analysis-Voice-APII.git
    cd Sentiment-Analysis-Voice-APII
    ```
 
-2. **Install dependencies**:
-   - Install the required Python packages:
+2. **Installer les dépendances** :
+
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Set up environment variables** (if applicable):
-   - Create a `.env` file in the root directory and define any necessary environment variables. (Refer to the documentation of any specific libraries used for details on required variables.)
+3. **Configurer les variables d’environnement** (si nécessaire) :
 
-4. **Run the application**:
-   - You can start the application using Docker:
-   ```bash
-   docker-compose up
-   ```
+   * Créez un fichier `.env` à la racine du projet pour stocker les clés API ou chemins personnalisés si requis.
 
-## Usage
+---
 
-To run the project, execute the following command to start the API:
+## Utilisation
+
+Pour démarrer l’API :
+
 ```bash
 python src/api/main.py
 ```
 
-### Basic Usage Example
-Once the API is running, you can send a POST request to the endpoint with audio data for sentiment analysis. Ensure you follow the API documentation for the required request format.
+### Exemple de Requête
 
-## Project Structure
+Envoyez une requête POST avec un fichier audio (`.wav`, `.mp3`, etc.) vers l’endpoint prévu. Le serveur renverra :
 
-The project is organized as follows:
+* la **transcription du discours**
+* et son **analyse de sentiment** (par exemple : *positif*, *neutre*, *négatif*).
+
+---
+
+## Structure du Projet
 
 ```
 Sentiment-Analysis-Voice-APII/
 ├── src/
-│   ├── api/                      # Contains the main API entry point
-│   │   └── main.py               # Main application file for the API
-│   ├── interface/                # User interface components
-│   │   └── gradio_app.py         # Gradio app for user interaction
-│   └── models/                   # Contains model definitions and logic
-│       ├── pipeline.py           # Pipeline for processing audio input
-│       ├── sentiment_analyzer.py  # Logic for analyzing sentiment
-│       └── speech_to_text.py     # Logic for converting speech to text
-├── .gitignore                    # Specifies files to ignore in version control
-├── docker-compose.yml            # Docker Compose configuration file
-└── requirements.txt              # List of dependencies
+│   ├── api/                    # Point d’entrée de l’API
+│   │   └── main.py
+│   ├── interface/              # Interface Gradio
+│   │   └── gradio_app.py
+│   └── models/                 # Logique et traitement
+│       ├── pipeline.py
+│       ├── sentiment_analyzer.py
+│       └── speech_to_text.py
+├── .gitignore
+└── requirements.txt
 ```
 
-### Explanation of Main Directories and Files
-- **api/**: This directory contains the main API code, specifically `main.py`, which serves as the entry point for the application.
-- **interface/**: This directory includes the user interface components, such as `gradio_app.py`, which allows users to interact with the sentiment analysis functionalities.
-- **models/**: Contains the core logic for the application, including:
-  - `pipeline.py`: Manages the workflow for processing audio input.
-  - `sentiment_analyzer.py`: Implements the sentiment analysis algorithms.
-  - `speech_to_text.py`: Handles the conversion of speech to text.
+---
 
-## Contributing
+## Contribution
 
-We welcome contributions to enhance the functionality and performance of the Sentiment Analysis Voice API. If you'd like to contribute, please follow these steps:
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them.
-4. Push your branch and submit a pull request.
+Les contributions sont les bienvenues pour améliorer les performances ou ajouter de nouvelles fonctionnalités :
 
-Thank you for your interest in contributing to this project!
+1. Forkez le projet
+2. Créez une branche : `feature/ma-fonctionnalité`
+3. Commitez vos modifications
+4. Ouvrez une Pull Request 🧠
